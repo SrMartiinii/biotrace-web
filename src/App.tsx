@@ -4,25 +4,9 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 import { Button } from "@/components/ui/button"
-import { useEffect } from "react"
-import { apiFetch } from "@/lib/api"
 
 function App() {
   const [count, setCount] = useState(0)
-
-useEffect(() => {
-  apiFetch("/api/auth/register", {
-    method: "POST",
-    body: JSON.stringify({
-      username: "testjunior3",
-      password: "test1234",
-      fullName: "Test Junior",
-      role: "STAFF",
-    }),
-  })
-    .then((data) => console.log("✅ Respuesta del backend:", data))
-    .catch((err) => console.error("❌ Error:", err))
-}, [])
 
   return (
     <>
@@ -81,11 +65,7 @@ useEffect(() => {
           <ul>
             <li>
               <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#github-icon"></use>
                 </svg>
                 GitHub
@@ -93,11 +73,7 @@ useEffect(() => {
             </li>
             <li>
               <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#discord-icon"></use>
                 </svg>
                 Discord
@@ -105,11 +81,7 @@ useEffect(() => {
             </li>
             <li>
               <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#x-icon"></use>
                 </svg>
                 X.com
@@ -117,11 +89,7 @@ useEffect(() => {
             </li>
             <li>
               <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
+                <svg className="button-icon" role="presentation" aria-hidden="true">
                   <use href="/icons.svg#bluesky-icon"></use>
                 </svg>
                 Bluesky
