@@ -1,21 +1,25 @@
 import { useState, type FormEvent } from "react"
+import { Navigate, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { apiFetch, ApiError } from "@/lib/api"
 import { setToken } from "@/lib/auth"
+import { useAuth } from "@/context/AuthContext"
 import type { AuthResponse } from "@/types"
 
-interface LoginProps {
-  onLoginSuccess: (user: AuthResponse) => void
-}
-
-export function Login({ onLoginSuccess }: LoginProps) {
+export function Login() {
+  const { user, login } = useAuth()
+  const navigate = useNavigate()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  if (user) {
+    return <Navigate to="/" replace />
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -28,7 +32,8 @@ export function Login({ onLoginSuccess }: LoginProps) {
         body: JSON.stringify({ username, password }),
       })
       setToken(data.token)
-      onLoginSuccess(data)
+      login(data)
+      navigate("/")
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.status === 401 ? "Usuario o contraseña incorrectos" : err.message)
