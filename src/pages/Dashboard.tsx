@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table"
 import { apiFetch, ApiError } from "@/lib/api"
 import { useAuth } from "@/context/AuthContext"
-import type { AlertResponse, AlertSeverity } from "@/types"
+import type { AlertResponse, AlertSeverity, AlertStatus } from "@/types"
 
 const SEVERITY_LABEL: Record<AlertSeverity, string> = {
   LOW: "Bajo",
@@ -39,6 +39,17 @@ export function Dashboard() {
       })
       .finally(() => setLoading(false))
   }, [])
+
+  async function handleUpdateStatus(id: number, status: AlertStatus) {
+    try {
+      await apiFetch<AlertResponse>(`/api/alerts/${id}/status?status=${status}`, {
+        method: "PATCH",
+      })
+      setAlerts((prev) => prev.filter((alert) => alert.id !== id))
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "No se pudo actualizar la alerta")
+    }
+  }
 
   return (
     <div className="mx-auto max-w-5xl p-6">
@@ -71,6 +82,7 @@ export function Dashboard() {
               <TableHead>Valor</TableHead>
               <TableHead>Rango normal</TableHead>
               <TableHead>Medido</TableHead>
+              <TableHead>Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -94,6 +106,20 @@ export function Dashboard() {
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {new Date(alert.measuredAt).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button size="sm" onClick={() => handleUpdateStatus(alert.id, "REVIEWED")}>
+                      Revisada
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleUpdateStatus(alert.id, "DISMISSED")}
+                    >
+                      Descartar
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
