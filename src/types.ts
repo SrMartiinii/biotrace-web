@@ -6,3 +6,22 @@ export interface AuthResponse {
   fullName: string
   role: Role
 }
+
+export type AlertSeverity = "LOW" | "HIGH" | "CRITICAL"
+export type AlertStatus = "PENDING" | "REVIEWED" | "DISMISSED"
+
+export interface AlertResponse {
+  id: number
+  severity: AlertSeverity
+  status: AlertStatus
+  patientName: string
+  medicalRecordNumber: string
+  testName: string
+  value: number
+  unit: string
+  referenceMin: number
+  referenceMax: number
+  measuredAt: string
+  createdAt: string
+  reviewedAt: string | null
+}
